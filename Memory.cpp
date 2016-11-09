@@ -72,6 +72,7 @@ void Memory::DumpMemory() {
 		Serial.print(" ");
 	}
 
+	Serial.println();
 	Serial.print("       ");
 	for (j = 0; j < 16; j++) {
 		Serial.print("-----");
