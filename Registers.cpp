@@ -6,11 +6,11 @@
 Registers registers;
 
 void Registers::InitRegisters() {
-	r0 = r1 = r2 = r3 = 0;
+	r0 = r1 = r2 = r3 = r4 = r5 = r6 = r7 = 0;
 
 	pc = 0x0;
 	status = 0x0;
-	sp = ram.GetMemMax();
+	sp = ram.GetMemMax()+1;
 }
 
 void Registers::DumpRegisters() const {
