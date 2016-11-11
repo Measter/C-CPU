@@ -330,12 +330,14 @@ void Core::InstrPUSH(unsigned int instruction) {
 	unsigned int a = registers.GetRegister(GetInstrRegA);
 	registers.DecSP();
 
-	ram.SetMemory(registers.GetSP(), a, false);
+	ram.SetMemory(registers.GetSP(), a, true);
 }
 
 void Core::InstrPOP(unsigned int instruction) {
+	unsigned int val = ram.GetMemory(registers.GetSP(), true);
 	registers.IncSP();
-	registers.SetRegister(GetInstrRegA, ram.GetMemory(registers.GetSP(), false));
+
+	registers.SetRegister(GetInstrRegA, val);
 }
 
 void Core::InstrCMP(unsigned int instruction) {
