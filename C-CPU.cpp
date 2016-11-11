@@ -30,9 +30,10 @@ void loop()
 
 	if (pins.Buttons.Reset.WasPressed()) {
 		registers.SetPC(pins.Multiplexers.Memory.Read());
-		PrintWord(registers.GetPC(), true);
-		if (pins.IsDebugEnabled())
+		if (pins.IsDebugEnabled()) {
 			Serial.print("PC Set: ");
+			PrintWord(registers.GetPC(), true);
+		}
 	}
 
 	if (pins.Buttons.Deposit.WasPressed()) {
