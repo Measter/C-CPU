@@ -8,128 +8,128 @@
 
 Core core;
 
-void Core::ExecuteNextInstruction() {
-	unsigned int instruction = GetNextWord();
+void Core::executeNextInstruction() {
+	unsigned int instruction = getNextWord();
 
 	switch (static_cast<OpCode>(instruction & OPCODE_MASK)) {
 
 		case OpCode::JEQ:
-			InstrJEQ(instruction);
+			instrJEQ(instruction);
 			break;
 		case OpCode::JNE:
-			InstrJNE(instruction);
+			instrJNE(instruction);
 			break;
 		case OpCode::JLT:
-			InstrJLT(instruction);
+			instrJLT(instruction);
 			break;
 		case OpCode::JGT:
-			InstrJGT(instruction);
+			instrJGT(instruction);
 			break;
 		case OpCode::JC:
-			InstrJC(instruction);
+			instrJC(instruction);
 			break;
 		case OpCode::JNC:
-			InstrJNC(instruction);
+			instrJNC(instruction);
 			break;
 		case OpCode::JMP:
-			InstrJMP(instruction);
+			instrJMP(instruction);
 			break;
 
 
 		case OpCode::ADD:
-			InstrADD(instruction);
+			instrADD(instruction);
 			break;
 		case OpCode::SUB:
-			InstrSUB(instruction);
+			instrSUB(instruction);
 			break;
 		case OpCode::NOT:
-			InstrNOT(instruction);
+			instrNOT(instruction);
 			break;
 		case OpCode::AND:
-			InstrAND(instruction);
+			instrAND(instruction);
 			break;
 		case OpCode::OR:
-			InstrOR(instruction);
+			instrOR(instruction);
 			break;
 		case OpCode::XOR:
-			InstrXOR(instruction);
+			instrXOR(instruction);
 			break;
 		case OpCode::SHR:
-			InstrSHR(instruction);
+			instrSHR(instruction);
 			break;
 		case OpCode::SHL:
-			InstrSHL(instruction);
+			instrSHL(instruction);
 			break;
 
 
 		case OpCode::PUSH:
-			InstrPUSH(instruction);
+			instrPUSH(instruction);
 			break;
 		case OpCode::POP:
-			InstrPOP(instruction);
+			instrPOP(instruction);
 			break;
 		case OpCode::CMP:
-			InstrCMP(instruction);
+			instrCMP(instruction);
 			break;
 
 
 		case OpCode::SETI:
-			InstrSETI(instruction);
+			instrSETI(instruction);
 			break;
 		case OpCode::SETIL:
-			InstrSETIL(instruction);
+			instrSETIL(instruction);
 			break;
 		case OpCode::STR:
-			InstrSTR(instruction);
+			instrSTR(instruction);
 			break;
 		case OpCode::LD:
-			InstrLD(instruction);
+			instrLD(instruction);
 			break;
 		case OpCode::SET:
-			InstrSET(instruction);
+			instrSET(instruction);
 			break;
 
 
 		default:
-			HadInvalidOpCode(instruction);
+			hadInvalidOpCode(instruction);
 			break;
 	}
 }
 
-void Core::HadInvalidOpCode(unsigned int opcode) {
+void Core::hadInvalidOpCode(unsigned int opcode) {
 	m_hadInvalidOpCode = true;
 
-	if (pins.IsDebugEnabled()) {
+	if (pins.isDebugEnabled()) {
 		Serial.print("CPU Crash! Invalid OpCode: ");
-		PrintWord(opcode, true);
+		printWord(opcode, true);
 
-		registers.DumpRegisters();
-		ram.DumpMemory();
+		registers.dumpRegisters();
+		ram.dumpMemory();
 	}
 }
 
-unsigned int Core::GetNextWord() {
-	unsigned int word = ram.GetMemory(registers.GetPC(), false);
-	registers.StepPC();
+unsigned int Core::getNextWord() {
+	unsigned int word = ram.getMemory(registers.getPC(), false);
+	registers.stepPC();
 
 	return word;
 }
 
 
 
-bool Core::GetHadInvalidOpCode() const {
+bool Core::getHadInvalidOpCode() const {
 	return m_hadInvalidOpCode;
 }
 
-bool Core::IsNegative(unsigned int val) {
+bool Core::isNegative(unsigned int val) {
 	// Abuse twos-compliment.
 	return val & 0x8000;
 }
 
-unsigned int Core::Reverse(unsigned int b) {
-	return (Reverse(b) << 8) | Reverse(b >> 8);
+unsigned int Core::reverse(unsigned int b) {
+	return (reverse(b) << 8) | reverse(b >> 8);
 }
-unsigned char Core::Reverse(unsigned char b) {
+unsigned char Core::reverse(unsigned char b) {
 	b = (b & 0xF0) >> 4 | (b & 0x0F) << 4;
 	b = (b & 0xCC) >> 2 | (b & 0x33) << 2;
 	b = (b & 0xAA) >> 1 | (b & 0x55) << 1;
@@ -137,8 +137,8 @@ unsigned char Core::Reverse(unsigned char b) {
 }
 
 
-bool Core::StatusTest(Condition condition) {
-	unsigned char status = registers.GetStatus();
+bool Core::statusTest(Condition condition) {
+	unsigned char status = registers.getStatus();
 
 	switch (condition) {
 		case Condition::NotEqual:
@@ -164,8 +164,8 @@ bool Core::StatusTest(Condition condition) {
 	}
 }
 
-void Core::SetStatus(Status over, Status neg, Status zero) {
-	unsigned char status = registers.GetStatus();
+void Core::setStatus(Status over, Status neg, Status zero) {
+	unsigned char status = registers.getStatus();
 
 	if (over == Status::Clear)
 		bitClear(status, STATUS_OVERFLOW);
@@ -182,201 +182,201 @@ void Core::SetStatus(Status over, Status neg, Status zero) {
 	else if (zero == Status::Set)
 		bitSet(status, STATUS_ZERO);
 
-	registers.SetStatus(status);
+	registers.setStatus(status);
 }
 
 
-void Core::InstrJEQ(unsigned int instruction) {
-	InstrJCCHelper(Condition::Equal);
+void Core::instrJEQ(unsigned int instruction) {
+	instrJCCHelper(Condition::Equal);
 }
 
-void Core::InstrJNE(unsigned int instruction) {
-	InstrJCCHelper(Condition::NotEqual);
+void Core::instrJNE(unsigned int instruction) {
+	instrJCCHelper(Condition::NotEqual);
 }
 
-void Core::InstrJLT(unsigned int instruction) {
-	InstrJCCHelper(Condition::LessThan);
+void Core::instrJLT(unsigned int instruction) {
+	instrJCCHelper(Condition::LessThan);
 }
 
-void Core::InstrJGT(unsigned int instruction) {
-	InstrJCCHelper(Condition::GreaterThan);
+void Core::instrJGT(unsigned int instruction) {
+	instrJCCHelper(Condition::GreaterThan);
 }
 
-void Core::InstrJC(unsigned int instruction) {
-	InstrJCCHelper(Condition::Overflow);
+void Core::instrJC(unsigned int instruction) {
+	instrJCCHelper(Condition::Overflow);
 }
 
-void Core::InstrJNC(unsigned int instruction) {
-	InstrJCCHelper(Condition::OverflowClear);
+void Core::instrJNC(unsigned int instruction) {
+	instrJCCHelper(Condition::OverflowClear);
 }
 
-void Core::InstrJMP(unsigned int instruction) {
-	registers.SetPC(ram.GetMemory(registers.GetPC(), false));
-}
-
-
-void Core::InstrJCCHelper(Condition condition) {
-	unsigned int addr = GetNextWord();
-
-	if (StatusTest(condition))
-		registers.SetPC(addr);
+void Core::instrJMP(unsigned int instruction) {
+	registers.setPC(ram.getMemory(registers.getPC(), false));
 }
 
 
+void Core::instrJCCHelper(Condition condition) {
+	unsigned int addr = getNextWord();
+
+	if (statusTest(condition))
+		registers.setPC(addr);
+}
 
 
-void Core::InstrADD(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+
+
+void Core::instrADD(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a + b;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrSUB(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrSUB(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a - b;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res > a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res > a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrNOT(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
+void Core::instrNOT(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
 	unsigned int res = ~a;
 
-	registers.SetRegister(a, res);
+	registers.setRegister(a, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrAND(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrAND(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a & b;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrOR(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrOR(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a | b;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrXOR(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrXOR(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a ^ b;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
-void Core::InstrSHR(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
+void Core::instrSHR(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
 	unsigned int res = a >> 1;
 	
-	registers.SetRegister(a, res);
+	registers.setRegister(a, res);
 	
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);	
 }
 
-void Core::InstrSHL(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
+void Core::instrSHL(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
 
 	unsigned long res = static_cast<unsigned long>(a) << 1;
 
-	registers.SetRegister(GetInstrRegA, res);
+	registers.setRegister(getInstrRegA, res);
 
-	SetStatus(res < a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res < a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
 
 
-void Core::InstrPUSH(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	registers.DecSP();
+void Core::instrPUSH(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	registers.decSP();
 
-	ram.SetMemory(registers.GetSP(), a, true);
+	ram.setMemory(registers.getSP(), a, true);
 }
 
-void Core::InstrPOP(unsigned int instruction) {
-	unsigned int val = ram.GetMemory(registers.GetSP(), true);
-	registers.IncSP();
+void Core::instrPOP(unsigned int instruction) {
+	unsigned int val = ram.getMemory(registers.getSP(), true);
+	registers.incSP();
 
-	registers.SetRegister(GetInstrRegA, val);
+	registers.setRegister(getInstrRegA, val);
 }
 
-void Core::InstrCMP(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrCMP(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
 	unsigned int res = a - b;
 
-	SetStatus(res > a ? Status::Set : Status::Clear,
-			  IsNegative(res) ? Status::Set : Status::Clear,
+	setStatus(res > a ? Status::Set : Status::Clear,
+			  isNegative(res) ? Status::Set : Status::Clear,
 			  res == 0 ? Status::Set : Status::Clear);
 }
 
 
 
-void Core::InstrSETI(unsigned int instruction) {
+void Core::instrSETI(unsigned int instruction) {
 	unsigned char imm = instruction & 0xFF;
-	registers.SetRegister(GetInstrRegA, imm);
+	registers.setRegister(getInstrRegA, imm);
 }
 
-void Core::InstrSETIL(unsigned int instruction) {
-	unsigned int imm = GetNextWord();
-	registers.SetRegister(GetInstrRegA, imm);
+void Core::instrSETIL(unsigned int instruction) {
+	unsigned int imm = getNextWord();
+	registers.setRegister(getInstrRegA, imm);
 }
 
-void Core::InstrSTR(unsigned int instruction) {
-	unsigned int a = registers.GetRegister(GetInstrRegA);
-	unsigned int b = registers.GetRegister(GetInstrRegB);
+void Core::instrSTR(unsigned int instruction) {
+	unsigned int a = registers.getRegister(getInstrRegA);
+	unsigned int b = registers.getRegister(getInstrRegB);
 
-	ram.SetMemory(b, a, true);
+	ram.setMemory(b, a, true);
 }
 
-void Core::InstrLD(unsigned int instruction) {
-	unsigned int b = registers.GetRegister(GetInstrRegB);
-	registers.SetRegister(GetInstrRegA, ram.GetMemory(b, true));
+void Core::instrLD(unsigned int instruction) {
+	unsigned int b = registers.getRegister(getInstrRegB);
+	registers.setRegister(getInstrRegA, ram.getMemory(b, true));
 }
 
-void Core::InstrSET(unsigned int instruction) {
-	unsigned int b = registers.GetRegister(GetInstrRegB);
-	registers.SetRegister(GetInstrRegA, b);
+void Core::instrSET(unsigned int instruction) {
+	unsigned int b = registers.getRegister(getInstrRegB);
+	registers.setRegister(getInstrRegA, b);
 }
 

@@ -30,19 +30,19 @@ class Registers {
 	unsigned int sp = 0;
 
 public:
-	void InitRegisters();
-	void DumpRegisters() const;
-	unsigned int GetRegister(unsigned char id) const;
-	unsigned int GetPC() const;
-	unsigned char GetStatus() const;
-	unsigned int GetSP() const;
-	void SetRegister(unsigned char id, unsigned int value);
-	void SetPC(unsigned int addr);
-	void SetStatus(unsigned char val);
+	void initRegisters();
+	void dumpRegisters() const;
+	unsigned int getRegister(unsigned char id) const;
+	unsigned int getPC() const;
+	unsigned char getStatus() const;
+	unsigned int getSP() const;
+	void setRegister(unsigned char id, unsigned int value);
+	void setPC(unsigned int addr);
+	void setStatus(unsigned char val);
 
-	void IncSP();
-	void DecSP();
-	void StepPC();
+	void incSP();
+	void decSP();
+	void stepPC();
 };
 
 extern Registers registers;

@@ -15,7 +15,7 @@ IO::IO() {
 	m_memoryRegister.write(0);
 }
 
-void IO::UpdateInputs
+void IO::updateInputs
 () {
 	Buttons.Reset.updateState();
 	Buttons.Deposit.updateState();
@@ -23,15 +23,15 @@ void IO::UpdateInputs
 	Buttons.Step.updateState();
 }
 
-void IO::SetMemoryLEDs(unsigned int value) const {
+void IO::setMemoryLEDs(unsigned int value) const {
 	m_memoryRegister.write(value & 0xFF, value >> 8);
 }
 
-void IO::SetDataLEDs(unsigned int value) const {
+void IO::setDataLEDs(unsigned int value) const {
 
 }
 
-bool IO::IsDebugEnabled() const {
+bool IO::isDebugEnabled() const {
 	return is_debug;
 }
 

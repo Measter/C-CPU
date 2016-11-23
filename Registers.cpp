@@ -5,15 +5,15 @@
 
 Registers registers;
 
-void Registers::InitRegisters() {
+void Registers::initRegisters() {
 	r0 = r1 = r2 = r3 = r4 = r5 = r6 = r7 = 0;
 
 	pc = 0x0;
 	status = 0x0;
-	sp = ram.GetMemMax()+1;
+	sp = ram.getMemMax()+1;
 }
 
-void Registers::DumpRegisters() const {
+void Registers::dumpRegisters() const {
 	Serial.println();
 	Serial.println("Register Dump:");
 
@@ -21,7 +21,7 @@ void Registers::DumpRegisters() const {
 		Serial.print("  R");
 		Serial.print(i);
 		Serial.print(": ");
-		PrintWord(reg_arr[i], false);
+		printWord(reg_arr[i], false);
 
 		if( i == 3 ) 
 			Serial.println();
@@ -29,53 +29,53 @@ void Registers::DumpRegisters() const {
 
 	Serial.println();
 	Serial.print("  PC: ");
-	PrintWord(pc, false);
+	printWord(pc, false);
 	Serial.print("  SP: ");
-	PrintWord(sp, true);
+	printWord(sp, true);
 
 	Serial.println("               ONZ");
 	Serial.print("  Status: ");
-	PrintByteBin(status, true);
+	printByteBin(status, true);
 }
 
-unsigned int Registers::GetPC() const {
+unsigned int Registers::getPC() const {
 	return pc;
 }
 
-unsigned char Registers::GetStatus() const {
+unsigned char Registers::getStatus() const {
 	return status;
 }
 
-unsigned int Registers::GetSP() const {
+unsigned int Registers::getSP() const {
 	return sp;
 }
 
 
-unsigned int Registers::GetRegister(unsigned char id) const {
+unsigned int Registers::getRegister(unsigned char id) const {
 	return reg_arr[id & REG_MAX];
 }
 
-void Registers::SetPC(unsigned int addr) {
+void Registers::setPC(unsigned int addr) {
 	pc = addr;
 }
 
-void Registers::SetRegister(unsigned char id, unsigned int value) {
+void Registers::setRegister(unsigned char id, unsigned int value) {
 	reg_arr[id & REG_MAX] = value;
 }
 
-void Registers::SetStatus(unsigned char val) {
+void Registers::setStatus(unsigned char val) {
 	status = val;
 }
 
-void Registers::IncSP() {
+void Registers::incSP() {
 	sp++;
 }
 
-void Registers::DecSP() {
+void Registers::decSP() {
 	sp--;
 }
 
-void Registers::StepPC() {
+void Registers::stepPC() {
 	pc++;
 }
 

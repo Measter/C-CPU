@@ -11,16 +11,16 @@ private:
 public:
 	Memory();
 
-	void ZeroMemory();
+	void zeroMemory();
 
-	static unsigned int GetMemMax();
+	static unsigned int getMemMax();
 
-	void SetMemory(unsigned int address, unsigned int value, bool updateLastAddress);
-	unsigned int GetMemory(unsigned int address, bool updateLastAddress);
+	void setMemory(unsigned int address, unsigned int value, bool updateLastAddress);
+	unsigned int getMemory(unsigned int address, bool updateLastAddress);
 
-	unsigned int GetLastMemoryAddress() const;
+	unsigned int getLastMemoryAddress() const;
 
-	void DumpMemory();
+	void dumpMemory();
 };
 
 extern Memory ram;

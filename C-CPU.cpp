@@ -9,48 +9,48 @@ void setup()
 {
 	Serial.begin(56000);
 
-	if (pins.IsDebugEnabled()) {
+	if (pins.isDebugEnabled()) {
 		Serial.println("C-CPU Emulator");
 		Serial.print("Zeroing RAM...");
-		ram.ZeroMemory();
+		ram.zeroMemory();
 		Serial.println("Done");
 	}
 
-	registers.InitRegisters();
+	registers.initRegisters();
 }
 
 void loop()
 {
-	pins.UpdateInputs();
+	pins.updateInputs();
 
-	if (pins.IsDebugEnabled() && UpdateDebugInput()) {
-		ram.SetMemory(registers.GetPC(), GetDebugInput(), true);
-		registers.StepPC();
+	if (pins.isDebugEnabled() && updateDebugInput()) {
+		ram.setMemory(registers.getPC(), getDebugInput(), true);
+		registers.stepPC();
 	}
 
 	if (pins.Buttons.Reset.wasPressed()) {
-		registers.SetPC(pins.Multiplexers.Memory.read());
-		if (pins.IsDebugEnabled()) {
+		registers.setPC(pins.Multiplexers.Memory.read());
+		if (pins.isDebugEnabled()) {
 			Serial.print("PC Set: ");
-			PrintWord(registers.GetPC(), true);
+			printWord(registers.getPC(), true);
 		}
 	}
 
 	if (pins.Buttons.Deposit.wasPressed()) {
-		ram.SetMemory(registers.GetPC(), pins.Multiplexers.Data.read(), true);
-		registers.StepPC();
+		ram.setMemory(registers.getPC(), pins.Multiplexers.Data.read(), true);
+		registers.stepPC();
 	}
 
 	if (pins.Buttons.Step.wasPressed()) {
-		core.ExecuteNextInstruction();
+		core.executeNextInstruction();
 	}
 
-	if (pins.Buttons.MemDump.wasPressed() && pins.IsDebugEnabled()) {
-		registers.DumpRegisters();
-		ram.DumpMemory();
+	if (pins.Buttons.MemDump.wasPressed() && pins.isDebugEnabled()) {
+		registers.dumpRegisters();
+		ram.dumpMemory();
 	}
 
-	pins.SetMemoryLEDs(ram.GetLastMemoryAddress());
+	pins.setMemoryLEDs(ram.getLastMemoryAddress());
 
 	delay(1);
 }

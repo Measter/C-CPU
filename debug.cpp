@@ -5,7 +5,7 @@ const char digits[] = "0123456789ABCDEF";
 unsigned char buffer[4];
 unsigned char buffer_in_loc = 0;
 
-void PrintByte(unsigned char value, bool newLine) {
+void printByte(unsigned char value, bool newLine) {
 	char str[3];
 	str[2] = 0;
 
@@ -20,7 +20,7 @@ void PrintByte(unsigned char value, bool newLine) {
 	}
 }
 
-void PrintWord(unsigned int value, bool newLine) {
+void printWord(unsigned int value, bool newLine) {
 	char str[5];
 	str[4] = 0;
 
@@ -37,7 +37,7 @@ void PrintWord(unsigned int value, bool newLine) {
 	}
 }
 
-void PrintByteBin(unsigned char value, bool newLine) {
+void printByteBin(unsigned char value, bool newLine) {
 	char str[9];
 	str[8] = 0;
 
@@ -56,8 +56,8 @@ void PrintByteBin(unsigned char value, bool newLine) {
 }
 
 // Returns true if the buffer was filled.
-// Call GetDebugInput() to grab input and clear buffer.
-bool UpdateDebugInput() {
+// Call getDebugInput() to grab input and clear buffer.
+bool updateDebugInput() {
 	if (Serial.available()) {
 		char input = Serial.read();
 
@@ -81,7 +81,7 @@ bool UpdateDebugInput() {
 	return false;
 }
 
-unsigned int GetDebugInput() {
+unsigned int getDebugInput() {
 	unsigned int value = 0;
 
 	unsigned char i;

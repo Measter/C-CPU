@@ -12,8 +12,8 @@ enum class Condition : unsigned char {
 	LessThan, GreaterThan
 };
 
-#define GetInstrRegA	((instruction & 0x700) >> 8)
-#define GetInstrRegB	(instruction & 0x7)
+#define getInstrRegA	((instruction & 0x700) >> 8)
+#define getInstrRegB	(instruction & 0x7)
 
 
 /////////////////////////

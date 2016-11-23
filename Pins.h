@@ -37,12 +37,12 @@ private:
 
 public:
 	IO();
-	void UpdateInputs();
+	void updateInputs();
 
-	void SetMemoryLEDs(unsigned int value) const;
-	void SetDataLEDs(unsigned int value) const;
+	void setMemoryLEDs(unsigned int value) const;
+	void setDataLEDs(unsigned int value) const;
 
-	bool IsDebugEnabled() const;
+	bool isDebugEnabled() const;
 
 	struct {
 		Button Reset = Button(RESET_PC_PIN, BTN_DEBOUNCE, true, false);
