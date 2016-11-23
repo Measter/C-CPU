@@ -12,19 +12,19 @@ IO::IO() {
 	last_mem_out = 0;
 	last_data_out = 0;
 
-	m_memoryRegister.Write(0);
+	m_memoryRegister.write(0);
 }
 
 void IO::UpdateInputs
 () {
-	Buttons.Reset.UpdateState();
-	Buttons.Deposit.UpdateState();
-	Buttons.MemDump.UpdateState();
-	Buttons.Step.UpdateState();
+	Buttons.Reset.updateState();
+	Buttons.Deposit.updateState();
+	Buttons.MemDump.updateState();
+	Buttons.Step.updateState();
 }
 
 void IO::SetMemoryLEDs(unsigned int value) const {
-	m_memoryRegister.Write(value & 0xFF, value >> 8);
+	m_memoryRegister.write(value & 0xFF, value >> 8);
 }
 
 void IO::SetDataLEDs(unsigned int value) const {

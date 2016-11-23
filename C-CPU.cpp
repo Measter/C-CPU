@@ -28,24 +28,24 @@ void loop()
 		registers.StepPC();
 	}
 
-	if (pins.Buttons.Reset.WasPressed()) {
-		registers.SetPC(pins.Multiplexers.Memory.Read());
+	if (pins.Buttons.Reset.wasPressed()) {
+		registers.SetPC(pins.Multiplexers.Memory.read());
 		if (pins.IsDebugEnabled()) {
 			Serial.print("PC Set: ");
 			PrintWord(registers.GetPC(), true);
 		}
 	}
 
-	if (pins.Buttons.Deposit.WasPressed()) {
-		ram.SetMemory(registers.GetPC(), pins.Multiplexers.Data.Read(), true);
+	if (pins.Buttons.Deposit.wasPressed()) {
+		ram.SetMemory(registers.GetPC(), pins.Multiplexers.Data.read(), true);
 		registers.StepPC();
 	}
 
-	if (pins.Buttons.Step.WasPressed()) {
+	if (pins.Buttons.Step.wasPressed()) {
 		core.ExecuteNextInstruction();
 	}
 
-	if (pins.Buttons.MemDump.WasPressed() && pins.IsDebugEnabled()) {
+	if (pins.Buttons.MemDump.wasPressed() && pins.IsDebugEnabled()) {
 		registers.DumpRegisters();
 		ram.DumpMemory();
 	}
