@@ -28,7 +28,7 @@ void loop()
 		registers.stepPC();
 	}
 
-	if (pins.Buttons.Reset.wasPressed()) {
+	if (pins.Multiplexers.Buttons.wasPressed(BTN_RESET_PC_ADDR)) {
 		registers.setPC(pins.Multiplexers.Memory.read());
 		if (pins.isDebugEnabled()) {
 			Serial.print("PC Set: ");
@@ -36,16 +36,16 @@ void loop()
 		}
 	}
 
-	if (pins.Buttons.Deposit.wasPressed()) {
+	if (pins.Multiplexers.Buttons.wasPressed(BTN_DEPOSIT_ADDR)) {
 		ram.setMemory(registers.getPC(), pins.Multiplexers.Data.read(), true);
 		registers.stepPC();
 	}
 
-	if (pins.Buttons.Step.wasPressed()) {
+	if (pins.Multiplexers.Buttons.wasPressed(BTN_STEP_ADDR)) {
 		core.executeNextInstruction();
 	}
 
-	if (pins.Buttons.MemDump.wasPressed() && pins.isDebugEnabled()) {
+	if (pins.Multiplexers.Buttons.wasPressed(BTN_MEMORY_DUMP_ADDR) && pins.isDebugEnabled()) {
 		registers.dumpRegisters();
 		ram.dumpMemory();
 	}

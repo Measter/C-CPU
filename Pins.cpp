@@ -8,6 +8,10 @@ IO pins;
 IO::IO() {
 	is_debug = true;		// Hardcoded for now. Will have physical switch later.
 
+	bool modes[8] = { false, false, false, false, false, false, true, false };
+	Multiplexers.Buttons = MultiplexedButtons4051(MUX_BTN_ADDR0, MUX_BTN_ADDR1, MUX_BTN_ADDR2,
+												  MUX_BTN_COMMON, true, modes, BTN_DEBOUNCE);
+
 	data_input = 0;
 	last_mem_out = 0;
 	last_data_out = 0;
@@ -17,10 +21,7 @@ IO::IO() {
 
 void IO::updateInputs
 () {
-	Buttons.Reset.updateState();
-	Buttons.Deposit.updateState();
-	Buttons.MemDump.updateState();
-	Buttons.Step.updateState();
+	Multiplexers.Buttons.updateState();
 }
 
 void IO::setMemoryLEDs(unsigned int value) const {
