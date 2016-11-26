@@ -13,24 +13,8 @@ void Core::executeNextInstruction() {
 
 	switch (static_cast<OpCode>(instruction & OPCODE_MASK)) {
 
-		case OpCode::JEQ:
-			instrJEQ(instruction);
-			break;
-		case OpCode::JNE:
-			instrJNE(instruction);
-			break;
-		case OpCode::JLT:
-			instrJLT(instruction);
-			break;
-		case OpCode::JGT:
-			instrJGT(instruction);
-			break;
-		case OpCode::JC:
-			instrJC(instruction);
-			break;
-		case OpCode::JNC:
-			instrJNC(instruction);
-			break;
+		case OpCode::JCC:
+			instrJCC(instruction);
 		case OpCode::JMP:
 			instrJMP(instruction);
 			break;
@@ -186,40 +170,15 @@ void Core::setStatus(Status over, Status neg, Status zero) {
 }
 
 
-void Core::instrJEQ(unsigned int instruction) {
-	instrJCCHelper(Condition::Equal);
-}
+void Core::instrJCC(unsigned int instruction) {
+	unsigned int addr = getNextWord();
 
-void Core::instrJNE(unsigned int instruction) {
-	instrJCCHelper(Condition::NotEqual);
-}
-
-void Core::instrJLT(unsigned int instruction) {
-	instrJCCHelper(Condition::LessThan);
-}
-
-void Core::instrJGT(unsigned int instruction) {
-	instrJCCHelper(Condition::GreaterThan);
-}
-
-void Core::instrJC(unsigned int instruction) {
-	instrJCCHelper(Condition::Overflow);
-}
-
-void Core::instrJNC(unsigned int instruction) {
-	instrJCCHelper(Condition::OverflowClear);
+	if (statusTest(static_cast<Condition>(getInstrRegA)))
+		registers.setPC(addr);
 }
 
 void Core::instrJMP(unsigned int instruction) {
 	registers.setPC(ram.getMemory(registers.getPC(), false));
-}
-
-
-void Core::instrJCCHelper(Condition condition) {
-	unsigned int addr = getNextWord();
-
-	if (statusTest(condition))
-		registers.setPC(addr);
 }
 
 

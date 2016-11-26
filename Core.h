@@ -18,15 +18,8 @@ class Core
 	static bool statusTest(Condition condition);
 	static void setStatus(Status over, Status neg, Status zero);
 
-	static void instrJEQ(unsigned int instruction);
-	static void instrJNE(unsigned int instruction);
-	static void instrJLT(unsigned int instruction);
-	static void instrJGT(unsigned int instruction);
-	static void instrJC(unsigned int instruction);
-	static void instrJNC(unsigned int instruction);
+	static void instrJCC(unsigned int instruction);
 	static void instrJMP(unsigned int instruction);
-		 
-	static void instrJCCHelper(Condition condition);
 		  
 	static void instrADD(unsigned int instruction);
 	static void instrSUB(unsigned int instruction);
