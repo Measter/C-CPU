@@ -6,10 +6,10 @@
 /////////////////////////
 
 enum class Condition : unsigned char {
-	NotEqual, Equal,
+	Equal, NotEqual,
+	LessThan, GreaterThan,
 	OverflowClear, Overflow,
-	Plus, Minus,
-	LessThan, GreaterThan
+	Plus, Minus
 };
 
 #define getInstrRegA	((instruction & 0x700) >> 8)
@@ -23,12 +23,7 @@ enum class Condition : unsigned char {
 #define OPCODE_MASK		0xF800
 
 enum class OpCode : unsigned int {
-	JEQ		= 0x0000,
-	JNE		= 0x0800,
-	JLT		= 0x1000,
-	JGT		= 0x1800,
-	JC		= 0x2000,
-	JNC		= 0x2800,
+	JCC		= 0x0000,
 	JMP		= 0x3000,
 	
 	ADD		= 0x3800,
